@@ -1,4 +1,0 @@
-0.3, right 90
-0.3, straight
-0.1, left 90
-0.1, right 90
