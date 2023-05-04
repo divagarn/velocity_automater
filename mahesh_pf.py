@@ -18,7 +18,7 @@ class RobotMovement:
 
     def get_current_position(self):
         #self.tf.waitForTransform('/odom', '/base_link', rospy.Time(), rospy.Duration(4.0))
-        (trans, rot) = self.tf.lookupTransform('/base_link', '/base_link', rospy.Time(0))
+        (trans, rot) = self.tf.lookupTransform('/map', '/map', rospy.Time(0))
         return trans[0], trans[1], rot[2]
 
     def move(self, distance, degree):
