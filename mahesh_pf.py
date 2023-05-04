@@ -14,28 +14,29 @@ class RobotMovement:
         self.tf = TransformListener()
         self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         self.client.wait_for_server()
-        self.current_degree = 0
+        #self.current_degree = 0
 
     def get_current_position(self):
-        self.tf.waitForTransform('/odom', '/base_link', rospy.Time(), rospy.Duration(4.0))
-        (trans, rot) = self.tf.lookupTransform('/odom', '/base_link', rospy.Time(0))
-        return trans[0], trans[1], math.degrees(rot[2])
+        #self.tf.waitForTransform('/odom', '/base_link', rospy.Time(), rospy.Duration(4.0))
+        (trans, rot) = self.tf.lookupTransform('/base_link', '/base_link', rospy.Time(0))
+        return trans[0], trans[1], rot[2]
 
     def move(self, distance, degree):
-        theta = math.radians(degree + self.current_degree)
-        x, y, _ = self.get_current_position()
+
+        x, y, current_degree = self.get_current_position()
+        theta = math.radians(degree) + current_degree
         x += distance * math.cos(theta)
         y += distance * math.sin(theta)
         goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = "map"
+        goal.target_pose.header.frame_id = "base_link"
         goal.target_pose.pose.position.x = x
         goal.target_pose.pose.position.y = y
         q = Quaternion(*quaternion_from_euler(0, 0, theta))
         goal.target_pose.pose.orientation = q
         self.client.send_goal(goal)
         self.client.wait_for_result()
-        self.current_degree += degree
-        print("Current degree: {} degrees".format(self.current_degree))
+        #self.current_degree += degree
+        print("Current degree: {} degrees".format(current_degree))
 
     def main_run(self):
         while not rospy.is_shutdown():
