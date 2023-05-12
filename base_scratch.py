@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""! @brief Example Python program with Doxygen style comments."""
+"""! @brief This code gives the goal to the robot via text file or from users input and this can
+be called from the main file to use this automation goal feature.
+"""
 
 
 ##
