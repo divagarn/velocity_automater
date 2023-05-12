@@ -1,4 +1,17 @@
 #!/usr/bin/env python
+"""! @brief Example Python program with Doxygen style comments."""
+
+
+##
+# @file base_scratch.py
+#
+# @section todo_doxygen_example TODO
+# - Add path folder run as main run
+#
+# @section author_doxygen_example Author(s)
+# - Created by Divagar N on 10/05/2023.
+# - Modified by Divagar N on 12/05/2023.
+
 
 # Imports
 import math
@@ -39,11 +52,13 @@ class RobotMovement:
         return trans[0], trans[1], rot[2]
 
     def move(self, distance, degree, wait_for_goal):
-        """! Process the distance and degree.
+        """! Process the distance, degree and wait_for_goal.
 
         @param distance the distance unit in meters.
         @param degree the degree unit in degrees.
+        @param wait_for_goal it was sets in string t or f which is wait for the current goal to end.
         """
+
         x, y, current_degree = self.get_current_position()
         theta = math.radians(degree)
         x += distance * math.cos(theta)
@@ -62,15 +77,23 @@ class RobotMovement:
         print("Current degree: {} degrees".format(current_degree))
 
     def main_run(self, file_path):
-        if file_path == "":
+        """! Process the file_path.
 
+        @param file_path it gets the file path from the start to execute the goals from the txt files.
+        """
+
+        # This condition is for when the file_path is empty it asks the goals from the user.
+        if file_path == "":
             while not rospy.is_shutdown():
                 try:
                     input_str = input("Enter distance and degree: ")
+                    # Get the inputs from the user as string.
                     distance, degree, wait_for_goal = map(str, input_str.split(','))
+                    # Convert degree and distance as float.
                     self.move(float(distance), float(degree), wait_for_goal)
                 except (ValueError, KeyboardInterrupt) as error:
                     rospy.logerr("Failed to send the goal: {}".format(str(error)))
+        # This condition is run when the file_path is not empty.
         else:
             with open(file_path, 'r') as f:
                 for line in f:
